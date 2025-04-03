@@ -1,0 +1,9 @@
+# Database data
+database/
+
+# Docker compose
+docker-compose.yml
+DockerFile
+
+# Environment variables
+.env

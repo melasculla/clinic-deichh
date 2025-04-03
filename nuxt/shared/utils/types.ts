@@ -1,0 +1,1 @@
+export type ImageJSON = { path: string, alt?: string }
