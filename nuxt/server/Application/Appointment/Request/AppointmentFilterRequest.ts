@@ -1,6 +1,6 @@
 import { z } from 'h3-zod'
 
-export const CatQueryFilterSchema = z.object({
+export const AppointmentQueryFilterSchema = z.object({
    orderBy: z.preprocess(val => {
       if (typeof val === 'string')
          try { return JSON.parse(val) } catch { return undefined }
@@ -12,4 +12,4 @@ export const CatQueryFilterSchema = z.object({
    }), { message: 'Wrong JSON format' }).optional().nullable()
 })
 
-export type CatQueryFilterRequest = z.infer<typeof CatQueryFilterSchema>
+export type AppointmentQueryFilterRequest = z.infer<typeof AppointmentQueryFilterSchema>

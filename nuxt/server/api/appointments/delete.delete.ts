@@ -1,4 +1,4 @@
-import DeleteCatService from '~~/server/Domain/Cat/Service/DeleteCatService'
+import DeleteAppointmentService from '~~/server/Domain/Appointment/Service/DeleteAppointmentService'
 import { z } from 'h3-zod'
 
 export default defineEventHandler({
@@ -7,7 +7,7 @@ export default defineEventHandler({
    ],
    handler: async event => {
       try {
-         await new DeleteCatService().deleteCat(event.context.requestDTO.body.id)
+         await new DeleteAppointmentService().deleteAppointment(event.context.requestDTO.body.id)
 
          return sendNoContent(event)
       } catch (err: any) {

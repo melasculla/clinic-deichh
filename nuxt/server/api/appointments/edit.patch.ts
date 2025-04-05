@@ -1,14 +1,14 @@
 import JsonResponse from '~~/server/Shared/Application/JsonResponse'
-import { CatPostSchema } from '~~/server/Application/Cat/Request/CatPostRequest'
-import CreateCatService from '~~/server/Domain/Cat/Service/CreateCatService'
+import { AppointmentPatchSchema } from '~~/server/Application/Appointment/Request/AppointmentPatchRequest'
+import EditAppointmentService from '~~/server/Domain/Appointment/Service/EditAppointmentService'
 
 export default defineEventHandler({
    onRequest: [
-      async event => await validateBody(event, CatPostSchema),
+      async event => await validateBody(event, AppointmentPatchSchema)
    ],
    handler: async event => {
       try {
-         const result = await new CreateCatService().createCat(event.context.requestDTO.body)
+         const result = await new EditAppointmentService().ediTAppointment(event.context.requestDTO.body)
 
          setResponseStatus(event, 201)
          return new JsonResponse(result.toJSON(), 201)

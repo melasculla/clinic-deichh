@@ -1,11 +1,10 @@
-@import './fonts.css';
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-   /* --font-main: 'asd';
-   --font-accent: 'asd'; */
+   --font-main: 'Arial';
+   --font-accent: 'Arial';
 
    --color-primary-900: hsl(164, 100%, 5%);
 
@@ -30,5 +29,5 @@
 }
 
 body {
-   @apply font-main text-neutral bg-background-100 text-lg;
+   @apply font-main text-neutral text-lg;
 }

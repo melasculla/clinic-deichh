@@ -2,17 +2,14 @@ import { joinURL } from 'ufo'
 
 export const ROUTES = {
    client: {
-      cats: {
-         kittens: {
-            list: (query: Record<any, any> = {}) => ({
-               name: 'kittens',
-               query
-            }),
-
-         },
+      appointments: {
+         list: (query: Record<any, any> = {}) => ({
+            name: 'kittens',
+            query
+         }),
 
          single: (slug: string, query: Record<any, any> = {}) => ({
-            name: 'cats-slug',
+            name: 'appointments-slug',
             params: { slug },
             query
          })
@@ -21,12 +18,12 @@ export const ROUTES = {
 
 
    api: {
-      cats: {
-         list: '/api/cats' as const,
-         single: (slug: string) => `/api/cats/${slug}` as const,
-         create: '/api/cats/create' as const,
-         edit: '/api/cats/edit' as const,
-         delete: '/api/cats/delete' as const,
+      appointments: {
+         list: '/api/appointments' as const,
+         single: (id: number) => `/api/appointments/${id}` as const,
+         create: '/api/appointments/create' as const,
+         edit: '/api/appointments/edit' as const,
+         delete: '/api/appointments/delete' as const,
       },
 
       mail: {

@@ -1,7 +1,7 @@
-import { pgTable, integer, text, serial, varchar, unique, pgEnum, type AnyPgColumn, timestamp, boolean, smallint, date, json } from 'drizzle-orm/pg-core'
+import { pgTable, integer, serial, varchar, unique, pgEnum, timestamp, date } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
-const userRoles = pgEnum('roles', ['admin', 'editor', 'user'])
+const userRoles = pgEnum('roles', ['admin', 'doctor', 'user'])
 export const usersTable = pgTable('users', {
    id: serial('id').primaryKey(),
    email: varchar('email', { length: 256 }).notNull().unique(),
@@ -32,20 +32,15 @@ export type TNewAccount = typeof accountsTable.$inferInsert
 
 
 
-export const catsTable = pgTable('cats', {
+export const appointmentsTable = pgTable('appointments', {
    id: serial('id').primaryKey(),
-   gender: smallint('gender').notNull(),
-   name: varchar('name').notNull(),
-   slug: varchar('slug').notNull().unique(),
-   color: integer('color'),
-   status: integer('status'),
-   thumbnail: json('thumbnail').$type<ImageJSON>(),
-   gallery: json('gallery').$type<ImageJSON[]>(),
-   sire: integer('sire').references((): AnyPgColumn => catsTable.id),
-   dam: integer('dam').references((): AnyPgColumn => catsTable.id),
+   doctorId: integer('doctor_id').references(() => usersTable.id).notNull(),
+   userId: integer('user_id').references(() => usersTable.id).notNull(),
+   price: integer('price'),
+   date: date('date').notNull(),
    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow()
 })
 
-export type TCat = typeof catsTable.$inferSelect
-export type TNewCat = typeof catsTable.$inferInsert
-export type TCatColumns = typeof catsTable._.columns
+export type TAppointment = typeof appointmentsTable.$inferSelect
+export type TNewAppointment = typeof appointmentsTable.$inferInsert
+export type TAppointmentColumns = typeof appointmentsTable._.columns

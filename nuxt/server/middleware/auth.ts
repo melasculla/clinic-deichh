@@ -24,7 +24,7 @@ const protectedRoutes: Route[] = [
       ]
    },
    {
-      path: '/api/cats',
+      path: '/api/appointments',
       permissions: [
          { methods: ['GET'] },
          { roles: ['admin'] }
