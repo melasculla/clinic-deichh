@@ -11,7 +11,7 @@ CREATE TABLE "appointments" (
 	"doctor_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
 	"price" integer,
-	"date" date NOT NULL,
+	"date" timestamp with time zone NOT NULL
 	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint

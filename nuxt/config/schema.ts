@@ -37,7 +37,7 @@ export const appointmentsTable = pgTable('appointments', {
    doctorId: integer('doctor_id').references(() => usersTable.id).notNull(),
    userId: integer('user_id').references(() => usersTable.id).notNull(),
    price: integer('price'),
-   date: date('date').notNull(),
+   date: timestamp('created_at', { withTimezone: true }).notNull(),
    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow()
 })
 

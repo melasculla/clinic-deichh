@@ -11,7 +11,7 @@ export default class Appointment {
       this.doctorId = appointment.doctorId
       this.userId = appointment.userId
       this.price = appointment.price
-      this.date = appointment.date
+      this.date = new Date(appointment.date)
       this.createdAt = appointment.createdAt || new Date()
    }
 
