@@ -7,6 +7,3 @@ DockerFile
 
 # Environment variables
 .env
-
-/nuxt/migrations
-/nuxt/drizzle/migrations
