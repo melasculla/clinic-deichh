@@ -100,8 +100,8 @@ export default class UserRepository implements UserRepositoryInterface {
             and(
                eq(usersTable.roles, ['doctor']),
                searchString ? or(
-                  ilike(usersTable.name, '%${searchString}%'),
-                  ilike(usersTable.email, '%${searchString}%'),
+                  ilike(usersTable.name, `%${searchString}%`),
+                  ilike(usersTable.email, `%${searchString}%`),
                ) : undefined
             )
          )
@@ -124,8 +124,8 @@ export default class UserRepository implements UserRepositoryInterface {
             and(
                eq(usersTable.roles, ['doctor']),
                searchParam ? or(
-                  ilike(usersTable.name, '%${searchParam}%'),
-                  ilike(usersTable.email, '%${searchParam}%'),
+                  ilike(usersTable.name, `%${searchParam}%`),
+                  ilike(usersTable.email, `%${searchParam}%`),
                ) : undefined
             )
          )
