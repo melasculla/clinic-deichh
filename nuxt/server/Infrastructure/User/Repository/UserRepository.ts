@@ -85,6 +85,7 @@ export default class UserRepository implements UserRepositoryInterface {
    public async removeBy(by: 'id', id: number) {
       await db.delete(usersTable).where(eq(usersTable[by], id))
    }
+
    public async findDoctors(
       pagination: PaginationRequest,
       searchString?: string
@@ -97,10 +98,10 @@ export default class UserRepository implements UserRepositoryInterface {
          .from(usersTable)
          .where(
             and(
-               eq(usersTable.roles, ['doctor']), 
+               eq(usersTable.roles, ['doctor']),
                searchString ? or(
-                  ilike(usersTable.name, %${searchString}%),
-                  ilike(usersTable.email, %${searchString}%),
+                  ilike(usersTable.name, '%${searchString}%'),
+                  ilike(usersTable.email, '%${searchString}%'),
                ) : undefined
             )
          )
@@ -114,19 +115,21 @@ export default class UserRepository implements UserRepositoryInterface {
       const doctors = await query.execute()
       return doctors.map(doctor => new User(doctor))
    }
+
    public async countDoctors(searchParam?: string): Promise<number> {
       const [total] = await db
          .select({ count: count() })
          .from(usersTable)
          .where(
             and(
-               eq(usersTable.roles, ['doctor']), 
+               eq(usersTable.roles, ['doctor']),
                searchParam ? or(
-                  ilike(usersTable.name, %${searchParam}%),
-                  ilike(usersTable.email, %${searchParam}%),
+                  ilike(usersTable.name, '%${searchParam}%'),
+                  ilike(usersTable.email, '%${searchParam}%'),
                ) : undefined
             )
          )
 
       return total.count
+   }
 }
