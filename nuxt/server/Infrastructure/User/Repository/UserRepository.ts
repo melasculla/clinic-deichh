@@ -89,7 +89,7 @@ export default class UserRepository implements UserRepositoryInterface {
    public async findDoctors(
       pagination: PaginationRequest,
       searchString?: string
-   ): Promise<User[]> {
+   ): Promise<TUser[]> {
       const isPaginationSetted = pagination.page && pagination.perPage
       const offset = isPaginationSetted && (pagination.page! - 1) * pagination.perPage!
 
@@ -112,8 +112,7 @@ export default class UserRepository implements UserRepositoryInterface {
          query.offset(offset).limit(pagination.perPage)
       }
 
-      const doctors = await query.execute()
-      return doctors.map(doctor => new User(doctor))
+      return await query.execute()
    }
 
    public async countDoctors(searchParam?: string): Promise<number> {
