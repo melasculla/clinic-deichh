@@ -6,7 +6,7 @@ declare module 'next-auth' {
    }
 
    interface Session {
-      roles: TUser['roles'],
+      roles: TUser['roles'],  
       uid: number
    }
 }

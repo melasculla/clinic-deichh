@@ -14,4 +14,11 @@ export default interface UserRepositoryInterface {
    save(userEntity: User): Promise<User>
 
    removeBy(by: 'id', id: number): Promise<void>
+
+   findDoctors(
+      pagination: PaginationRequest,
+      searchString?: string
+   ): Promise<TUser[]>
+
+   countDoctors(searchParam?: string): Promise<number>
 }
