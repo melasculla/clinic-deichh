@@ -2,6 +2,7 @@ import GetAllDoctorsServiceInterface from './GetAllDoctorsServiceInterface'
 import UserRepository from '~~/server/Infrastructure/User/Repository/UserRepository'
 import UserRepositoryInterface from '~~/server/Infrastructure/User/Repository/UserRepositoryInterface'
 import { PaginationRequest } from '~~/server/Shared/Request/PaginationRequest'
+import { SpecializationFilterRequestRequest } from '~~/server/Application/Specialization/Request/SpecializationFilterRequest'
 
 export default class GetAllDoctorsService implements GetAllDoctorsServiceInterface {
    constructor(
@@ -9,10 +10,11 @@ export default class GetAllDoctorsService implements GetAllDoctorsServiceInterfa
    ) { }
 
    public async getAllDoctors(
-      pagination: PaginationRequest
+      pagination: PaginationRequest,
+      filters?: SpecializationFilterRequestRequest,
    ) {
       const [doctors, count] = await Promise.all([
-         this.repository.findDoctors(pagination),
+         this.repository.findDoctors(pagination, filters),
          this.repository.countDoctors()
       ])
 

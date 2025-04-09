@@ -1,7 +1,9 @@
 import UserRepositoryInterface from './UserRepositoryInterface'
 import { PaginationRequest } from '~~/server/Shared/Request/PaginationRequest'
+import { SpecializationFilterRequestRequest } from '~~/server/Application/Specialization/Request/SpecializationFilterRequest'
 import User from '~~/server/Domain/User/Entity/User'
-import { and, count, desc, eq, ilike, notInArray, or } from 'drizzle-orm'
+import { and, count, desc, eq, like, inArray, notInArray, or } from 'drizzle-orm'
+
 
 export default class UserRepository implements UserRepositoryInterface {
    public async findAll(
@@ -21,8 +23,8 @@ export default class UserRepository implements UserRepositoryInterface {
          .where(
             and(
                searchString ? or(
-                  ilike(usersTable.name, `%${searchString}%`),
-                  ilike(usersTable.email, `%${searchString}%`),
+                  like(usersTable.name, `%${searchString}%`),
+                  like(usersTable.email, `%${searchString}%`),
                ) : undefined,
                notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
             )
@@ -50,8 +52,8 @@ export default class UserRepository implements UserRepositoryInterface {
       const [total] = await db.select({ count: count() }).from(usersTable).where(
          and(
             searchParam ? or(
-               ilike(usersTable.name, `%${searchParam}%`),
-               ilike(usersTable.email, `%${searchParam}%`),
+               like(usersTable.name, `%${searchParam}%`),
+               like(usersTable.email, `%${searchParam}%`),
             ) : undefined,
             notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
          ),
@@ -88,34 +90,52 @@ export default class UserRepository implements UserRepositoryInterface {
 
    public async findDoctors(
       pagination: PaginationRequest,
+      filters?: SpecializationFilterRequestRequest,
       searchString?: string
-   ): Promise<TUser[]> {
-      const isPaginationSetted = pagination.page && pagination.perPage
-      const offset = isPaginationSetted && (pagination.page! - 1) * pagination.perPage!
-
+   ) {
       const query = db
-         .select()
+         .select({
+            id: usersTable.id,
+            name: usersTable.name,
+            email: usersTable.email,
+            specializations: specializationsTable.name,
+         })
          .from(usersTable)
-         .where(
-            and(
-               eq(usersTable.roles, ['doctor']),
-               searchString ? or(
-                  ilike(usersTable.name, `%${searchString}%`),
-                  ilike(usersTable.email, `%${searchString}%`),
-               ) : undefined
-            )
-         )
+         .where(and(
+            eq(usersTable.roles, ['doctor']),
+            // filters?.specializations ? inArray(specializationsTable.name, filters?.specializations) : undefined,
+            searchString ? or(
+               like(usersTable.name, `%${searchString}%`),
+               like(usersTable.email, `%${searchString}%`),
+            ) : undefined
+         ))
+         .innerJoin(doctorSpecializationsTable, eq(doctorSpecializationsTable.doctorId, usersTable.id))
+         .innerJoin(specializationsTable, eq(specializationsTable.id, doctorSpecializationsTable.specializationId))
          .orderBy(desc(usersTable.id))
-         .$dynamic()
 
-      if (offset && pagination.perPage) {
-         query.offset(offset).limit(pagination.perPage)
-      }
+      if (pagination && pagination.page && pagination.perPage)
+         query
+            .offset((pagination.page - 1) * pagination.perPage)
+            .limit(pagination.perPage)
 
-      return await query.execute()
+      const rows = await query.execute()
+
+      const result = rows.reduce((total, item) => {
+         if (total[item.id])
+            total[item.id].specializations.push(item.specializations)
+         else
+            total[item.id] = { ...item, specializations: [item.specializations] }
+
+         return total
+      }, {} as Record<number, Omit<TUser, 'roles'> & { specializations: TSpecialization['name'][] }>)
+
+      // костыль
+      return filters?.specializations
+         ? Object.values(result).filter(item => item.specializations.some(child => filters.specializations!.includes(child)))
+         : Object.values(result)
    }
 
-   public async countDoctors(searchParam?: string): Promise<number> {
+   public async countDoctors(searchParam?: string) {
       const [total] = await db
          .select({ count: count() })
          .from(usersTable)
@@ -123,8 +143,8 @@ export default class UserRepository implements UserRepositoryInterface {
             and(
                eq(usersTable.roles, ['doctor']),
                searchParam ? or(
-                  ilike(usersTable.name, `%${searchParam}%`),
-                  ilike(usersTable.email, `%${searchParam}%`),
+                  like(usersTable.name, `%${searchParam}%`),
+                  like(usersTable.email, `%${searchParam}%`),
                ) : undefined
             )
          )
