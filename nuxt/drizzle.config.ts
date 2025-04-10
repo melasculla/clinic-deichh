@@ -5,6 +5,5 @@ export default defineConfig({
 	out: './migrations',
 	dialect: 'postgresql',
 	dbCredentials: {
-		url: process.env.NUXT_POSTGRES_URL!
-	},
+		url: process.env.NUXT_POSTGRES_URL!	},
 });
