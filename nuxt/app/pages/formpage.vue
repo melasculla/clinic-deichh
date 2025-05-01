@@ -4,7 +4,7 @@
 
 <template>
    <div>
-      <p>FormPage</p>
+      <DoctorTest />
    </div>
 </template>
 

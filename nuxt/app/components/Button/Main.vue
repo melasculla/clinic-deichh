@@ -2,18 +2,22 @@
 import { type RouteLocationRaw } from '#vue-router'
 import { NuxtLink } from '#components'
 
-const { variant = 'fill' } = defineProps<{
+const { variant = 'light', size = 'small' } = defineProps<{
    to?: RouteLocationRaw,
-   variant?: 'fill' | 'outline'
+   variant?: 'light' | 'dark'
+   size?: 'small' | 'big'
 }>()
 </script>
 
 <template>
    <component :is="to ? NuxtLink : 'button'" :to="to"
-      class="text-3xl rounded-lg py-6 px-3 font-bold cursor-pointer hover:shadow-[0_2px_4px_#5E6566]" :class="[
-         variant === 'fill'
+      class="text-3xl rounded-lg font-bold cursor-pointer hover:shadow-[0_2px_4px_#5E6566] transition-all" :class="[
+         variant === 'light'
             ? 'text-white bg-[#58A791]'
-            : 'relative text-transparent bg-clip-text border-2 border-blue-200'
+            : 'text-gray-800 bg-[#DAE9DB] hover:bg-[#58A791] hover:text-white',
+         size === 'small'
+            ? 'py-3 px-5'
+            : 'py-6 px-3'
       ]">
       <slot />
    </component>
