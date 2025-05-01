@@ -1,19 +1,9 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-   --font-main: 'Arial';
-   --font-accent: 'Arial';
-
-   --color-primary-900: hsl(164, 100%, 5%);
-
-   --color-neutral: hsl(180, 2%, 75%);
-}
 
 @layer components {
    .error {
-      color: red;
+      color: rgb(255, 0, 0);
       font-weight: bold;
       text-transform: uppercase;
       font-size: var(--text-4xl);
@@ -24,10 +14,4 @@
    }
 }
 
-@layer theme {
-   .dark {}
-}
 
-body {
-   @apply font-main text-neutral text-lg;
-}
