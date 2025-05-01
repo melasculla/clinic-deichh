@@ -1,142 +1,29 @@
 <script lang="ts" setup>
+const { signIn } = useAuth()
 </script>
 
-<head>
-   
-</head>
 <template>
-  
-  <div class="site_name">
-    <p>Точка опоры</p>
-  </div>
+   <div class="py-20">
+      <div
+         class="relative grid gap-8 max-w-140 mx-auto bg-background border border-secondary rounded-3xl text-center py-36 px-10">
+         <p class="text-6xl mb-5">Вход</p>
 
-  <div class="entry">
-    <p class="vhod">Вход</p>
-    <div class="login">
-      <input id="emailsignup" name="emailsignup" type="text" placeholder="Ваш email"/>
-    </div>
-    <button class="next_but">
-      <p>Продолжить</p>
-    </button>
-    <button class="google">
-      <a href="/api/auth/signin/" class="google-login-button">
-        Войти через Google
-      </a>
-    </button>
+         <div class="login text-4xl">
+            <input class="text-center min-w-0 w-full py-5 px-4 rounded-lg bg-white" type="text" placeholder="Ваш email" />
+         </div>
 
-  </div>
-  <NuxtImg class="points_left_img" src="/images/points.png" />
-  <NuxtImg class="points_right_img" src="/images/points.png" />
+         <ButtonMain>
+            Продолжить
+         </ButtonMain>
 
+         <ButtonMain @click="signIn('google')">
+            Войти через Google
+         </ButtonMain>
+
+         <NuxtImg class="-z-[1] absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2" src="/img/points.png" />
+         <NuxtImg class="-z-[1] absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2" src="/img/points.png" />
+      </div>
+   </div>
 </template>
 
-
-<style>
-    @font-face {
-    font-family: 'Lettersano Regular';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Lettersano Regular'), url('fixedlettersano.woff') format('woff');
-    }
-
-
-.site_name{
-  
-  top: 1rem;  
-}
-.site_name p{
-  font-family: 'Lettersano Regular', sans-serif;
-  font-size: calc(2px + 2vw);
-  text-align: center
-}
-
-.entry {
-  font-family: 'Lettersano Regular', sans-serif;
-  background-color: #DAE9DB;
-  border-radius: 20px;
-  position: absolute; 
-  z-index: 2;
-  top: 50vh; 
-  left: 50%; 
-  transform: translate(-50%, -50%);
-
-  padding-top: 2vh;
-  padding-left: 25px;
-  padding-right: 25px;
-
-  width: 25%;
-  height: 60vh;
-
-  border-width: 2px;
-  border-color: #5E6566;
-}
-
-.points_left_img {
-  position: fixed;
-  top:15vh;
-  left: 34%;
-  width: 8%;
-  z-index: 1;
-}
-.points_right_img {
-  position: fixed;
-  bottom:11vh;
-  right: 34%;
-  width: 8%;
-  z-index: 1;
-}
-
-.entry .vhod{
-  font-size: calc(10px + 2vw);
-  text-align: center
-}
-
-.entry .login {
-  margin-top: 5vh;
-}
-
-input {
-  background-color: #fff;
-  border-radius: 10px;
-  height: 8vh;
-  width: 100%;
-  
-}
-input::placeholder{
-  font-size: calc(5px + 1vw);
-  text-align: center;
-}
-
-.entry .next_but{
-  background-color: #58A791;
-  border-radius: 10px;
-  height: 8vh;
-  width: 100%;
-  margin-top: 30px;
-}
-.entry .next_but:hover{
-  box-shadow: 0 2px 4px #5E6566;
-}
-.entry .next_but p{
-  font-size: calc(8px + 1vw);
-  text-align: center;
-  color: #fff;
-}
-
-.entry .google{
-  background-color: #58A791;
-  border-radius: 10px;
-  height: 8vh;
-  width: 100%;
-  margin-top: 10px;
-}
-.entry .google:hover{
-  box-shadow: 0 2px 4px #5E6566;
-}
-.entry .google a{
-  font-size: calc(8px + 1vw);
-  text-align: center;
-  color: #fff;
-}
-
-</style>
+<style scoped></style>

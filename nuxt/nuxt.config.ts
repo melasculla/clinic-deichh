@@ -7,7 +7,6 @@ export default defineNuxtConfig({
 
    css: ['~/assets/css/main.css'],
 
-
    runtimeConfig: {
       public: {
          mail: '',
@@ -72,7 +71,7 @@ export default defineNuxtConfig({
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
             { charset: 'utf-8' },
          ],
-         
+
          // link: [{ rel: 'icon', type: 'image/webp', href: '/favicon.webp' }],
       }
    },
@@ -89,7 +88,6 @@ export default defineNuxtConfig({
          ssr: false
       },
    },
-
 
    nitro: {
       routeRules: {

@@ -9,10 +9,10 @@ const { variant = 'fill' } = defineProps<{
 </script>
 
 <template>
-   <component :is="to ? NuxtLink : 'button'" :to="to" class="uppercase rounded-lg py-1 px-2 font-bold cursor-pointer"
-      :class="[
+   <component :is="to ? NuxtLink : 'button'" :to="to"
+      class="text-3xl rounded-lg py-6 px-3 font-bold cursor-pointer hover:shadow-[0_2px_4px_#5E6566]" :class="[
          variant === 'fill'
-            ? 'text-red-100'
+            ? 'text-white bg-[#58A791]'
             : 'relative text-transparent bg-clip-text border-2 border-blue-200'
       ]">
       <slot />

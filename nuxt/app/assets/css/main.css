@@ -1,17 +1,30 @@
 @import "tailwindcss";
 
-
-@layer components {
-   .error {
-      color: rgb(255, 0, 0);
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: var(--text-4xl);
-      text-align: center;
-      padding: 1rem 3rem;
-      max-width: 100%;
-      word-break: break-all;
-   }
+@font-face {
+   font-family: 'Lettersano Regular';
+   font-style: normal;
+   font-weight: normal;
+   font-display: swap;
+   src: local('Lettersano Regular'), url('/fonts/fixedlettersano.woff') format('woff');
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+   --font-main: 'Lettersano Regular';
+
+
+   --color-primary-900: hsl(164, 100%, 5%);
+   --color-secondary: hsl(188, 4%, 38%);
+   --color-background: hsl(124, 25%, 88%);
+
+   --color-neutral: hsl(180, 2%, 75%);
+}
+
+@layer theme {
+   .dark {}
+}
+
+body {
+   @apply font-main text-black text-lg;
+}
