@@ -8,13 +8,9 @@ export default interface UserRepositoryInterface {
       searchString?: string
    ): Promise<TUser[]>
 
-   findBy(by: 'email' | 'id', emailOrID: number | string): Promise<User | null>
-
    count(searchParam?: string): Promise<number>
 
-   save(userEntity: User): Promise<User>
-
-   removeBy(by: 'id', id: number): Promise<void>
+   findBy(by: 'email' | 'id', emailOrID: number | string): Promise<User | null>
 
    findDoctors(
       pagination: PaginationRequest,
@@ -28,4 +24,8 @@ export default interface UserRepositoryInterface {
    }>>
 
    countDoctors(searchParam?: string): Promise<number>
+
+   save(userEntity: User): Promise<User>
+
+   removeBy(by: 'id', id: number): Promise<void>
 }

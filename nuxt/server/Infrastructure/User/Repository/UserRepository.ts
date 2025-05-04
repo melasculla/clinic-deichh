@@ -6,37 +6,6 @@ import { and, count, desc, eq, like, inArray, notInArray, or } from 'drizzle-orm
 
 
 export default class UserRepository implements UserRepositoryInterface {
-   public async count(searchParam?: string) {
-      const [total] = await db.select({ count: count() }).from(usersTable).where(
-         and(
-            searchParam ? or(
-               like(usersTable.name, `%${searchParam}%`),
-               like(usersTable.email, `%${searchParam}%`),
-            ) : undefined,
-            notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
-         ),
-      )
-
-      return total.count
-   }
-
-   public async countDoctors(searchParam?: string) {
-      const [total] = await db
-         .select({ count: count() })
-         .from(usersTable)
-         .where(
-            and(
-               eq(usersTable.roles, ['doctor']),
-               searchParam ? or(
-                  like(usersTable.name, `%${searchParam}%`),
-                  like(usersTable.email, `%${searchParam}%`),
-               ) : undefined
-            )
-         )
-
-      return total.count
-   }
-
    public async findAll(
       pagination: PaginationRequest,
       searchString?: string
@@ -69,6 +38,20 @@ export default class UserRepository implements UserRepositoryInterface {
       }
 
       return await query.execute() as any
+   }
+
+   public async count(searchParam?: string) {
+      const [total] = await db.select({ count: count() }).from(usersTable).where(
+         and(
+            searchParam ? or(
+               like(usersTable.name, `%${searchParam}%`),
+               like(usersTable.email, `%${searchParam}%`),
+            ) : undefined,
+            notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
+         ),
+      )
+
+      return total.count
    }
 
    public async findBy(by: 'email' | 'id', emailOrID: number | string) {
@@ -122,12 +105,25 @@ export default class UserRepository implements UserRepositoryInterface {
 
       // костыль
       return filters?.specializations
-         ? Object.values(result).filter(item => item.specializations.some(child => filters.specializations!.includes(child)))
+         ? Object.values(result).filter(item => item.specializations.some(child => filters.specializations!.includes(child.toLowerCase())))
          : Object.values(result)
    }
 
-   public async removeBy(by: 'id', id: number) {
-      await db.delete(usersTable).where(eq(usersTable[by], id))
+   public async countDoctors(searchParam?: string) {
+      const [total] = await db
+         .select({ count: count() })
+         .from(usersTable)
+         .where(
+            and(
+               eq(usersTable.roles, ['doctor']),
+               searchParam ? or(
+                  like(usersTable.name, `%${searchParam}%`),
+                  like(usersTable.email, `%${searchParam}%`),
+               ) : undefined
+            )
+         )
+
+      return total.count
    }
 
    public async save(userEntity: User) {
@@ -150,5 +146,9 @@ export default class UserRepository implements UserRepositoryInterface {
       }
 
       return userEntity
+   }
+
+   public async removeBy(by: 'id', id: number) {
+      await db.delete(usersTable).where(eq(usersTable[by], id))
    }
 }
