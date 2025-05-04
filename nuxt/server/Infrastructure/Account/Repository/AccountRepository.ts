@@ -3,6 +3,11 @@ import AccountRepositoryInterface from './AccountRepositoryInterface'
 import Account from '~~/server/Domain/Account/Entity/Account'
 
 export default class AccountRepository implements AccountRepositoryInterface {
+   public async countForUser(id: number) {
+      const [total] = await db.select({ count: count() }).from(accountsTable).where(eq(accountsTable.id, id))
+      return total.count
+   }
+
    public async findAllForUser(id: number) {
       const result = await db.select().from(accountsTable)
          .where(eq(accountsTable.userId, id))
@@ -25,9 +30,8 @@ export default class AccountRepository implements AccountRepositoryInterface {
       return new Account(account)
    }
 
-   public async countForUser(id: number) {
-      const [total] = await db.select({ count: count() }).from(accountsTable).where(eq(accountsTable.id, id))
-      return total.count
+   public async removeBy(by: 'id' | 'userId', id: number) {
+      await db.delete(accountsTable).where(eq(accountsTable[by], id))
    }
 
    public async save(accountEntity: Account) {
@@ -49,9 +53,5 @@ export default class AccountRepository implements AccountRepositoryInterface {
       }
 
       return accountEntity
-   }
-
-   public async removeBy(by: 'id' | 'userId', id: number) {
-      await db.delete(accountsTable).where(eq(accountsTable[by], id))
    }
 }

@@ -1,11 +1,10 @@
 export default class Appointment {
-   private id: TAppointment['id']
-   private doctorId: TAppointment['doctorId']
-   private userId: TAppointment['userId']
-   private price: TAppointment['price']
-   private date: TAppointment['date']
    private createdAt: TAppointment['createdAt']
-
+   private date: TAppointment['date']
+   private doctorId: TAppointment['doctorId']
+   private id: TAppointment['id']
+   private price: TAppointment['price']
+   private userId: TAppointment['userId']
    constructor(appointment: TAppointment) {
       this.id = appointment.id
       this.doctorId = appointment.doctorId
@@ -15,61 +14,40 @@ export default class Appointment {
       this.createdAt = appointment.createdAt || new Date()
    }
 
-   public getId() {
-      return this.id
-   }
-
-   public getDoctorId() {
-      return this.doctorId
-   }
-
-   public getUserId() {
-      return this.userId
-   }
-
-   public getPrice() {
-      return this.price
-   }
-
-   public getDate() {
-      return this.date
+   public fromDB(appointment: TAppointment) {
+      this.id = appointment.id
+      this.doctorId = appointment.doctorId
+      this.userId = appointment.userId
+      this.price = appointment.price
+      this.date = appointment.date
+      this.createdAt = appointment.createdAt
    }
 
    public getCreatedAt() {
       return this.createdAt
    }
 
-   // Update
-
-   public updateId(id: TAppointment['id']) {
-      this.id = id
-      return this
+   public getDate() {
+      return this.date
    }
 
-   public updateDoctorId(doctorId: TAppointment['doctorId']) {
-      this.doctorId = doctorId
-      return this
+   public getDoctorId() {
+      return this.doctorId
    }
 
-   public updateUserId(userId: TAppointment['userId']) {
-      this.userId = userId
-      return this
+   public getId() {
+      return this.id
    }
 
-   public updatePrice(price: TAppointment['price']) {
-      this.price = price
-      return this
+   public getPrice() {
+      return this.price
    }
 
-   public updateDate(date: TAppointment['date']) {
-      this.date = date
-      return this
+   public getUserId() {
+      return this.userId
    }
 
-   public updateCreatedAt(createdAt: TAppointment['createdAt']) {
-      this.createdAt = createdAt
-      return this
-   }
+   
 
    public toJSON() {
       return {
@@ -82,12 +60,35 @@ export default class Appointment {
       }
    }
 
-   public fromDB(appointment: TAppointment) {
-      this.id = appointment.id
-      this.doctorId = appointment.doctorId
-      this.userId = appointment.userId
-      this.price = appointment.price
-      this.date = appointment.date
-      this.createdAt = appointment.createdAt
+   public updateCreatedAt(createdAt: TAppointment['createdAt']) {
+      this.createdAt = createdAt
+      return this
+   }
+
+   public updateDate(date: TAppointment['date']) {
+      this.date = date
+      return this
+   }
+
+   public updateDoctorId(doctorId: TAppointment['doctorId']) {
+      this.doctorId = doctorId
+      return this
+   }
+
+// Update
+
+   public updateId(id: TAppointment['id']) {
+      this.id = id
+      return this
+   }
+
+   public updateUserId(userId: TAppointment['userId']) {
+      this.userId = userId
+      return this
+   }
+
+   public updatePrice(price: TAppointment['price']) {
+      this.price = price
+      return this
    }
 }

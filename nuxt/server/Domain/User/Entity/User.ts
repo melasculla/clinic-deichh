@@ -1,6 +1,6 @@
 export default class User {
-   private id: TUser['id'] | null
    private email: TUser['email']
+   private id: TUser['id'] | null
    private name: TUser['name']
    private roles: TUser['roles'] | null
 
@@ -11,12 +11,12 @@ export default class User {
       this.roles = user.roles || null
    }
 
-   public getId() {
-      return this.id
-   }
-
    public getEmail() {
       return this.email
+   }
+
+   public getId() {
+      return this.id
    }
 
    public getName() {

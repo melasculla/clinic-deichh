@@ -23,4 +23,6 @@ export default class GetAllDoctorsService implements GetAllDoctorsServiceInterfa
          total: count
       }
    }
+      
+   
 }

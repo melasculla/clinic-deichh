@@ -10,10 +10,9 @@ handlebars.registerHelper('stripHTML', (html: string) => {
 })
 
 export abstract class Mail {
-   public plainText: string
-   public html: string
    private htmlTemplate: string
-
+   public html: string
+   public plainText: string
    /**
     * @param to @default - 'mail@example.com'
     * @param subject string

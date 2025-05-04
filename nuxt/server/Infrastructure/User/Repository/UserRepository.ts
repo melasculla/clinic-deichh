@@ -6,6 +6,37 @@ import { and, count, desc, eq, like, inArray, notInArray, or } from 'drizzle-orm
 
 
 export default class UserRepository implements UserRepositoryInterface {
+   public async count(searchParam?: string) {
+      const [total] = await db.select({ count: count() }).from(usersTable).where(
+         and(
+            searchParam ? or(
+               like(usersTable.name, `%${searchParam}%`),
+               like(usersTable.email, `%${searchParam}%`),
+            ) : undefined,
+            notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
+         ),
+      )
+
+      return total.count
+   }
+
+   public async countDoctors(searchParam?: string) {
+      const [total] = await db
+         .select({ count: count() })
+         .from(usersTable)
+         .where(
+            and(
+               eq(usersTable.roles, ['doctor']),
+               searchParam ? or(
+                  like(usersTable.name, `%${searchParam}%`),
+                  like(usersTable.email, `%${searchParam}%`),
+               ) : undefined
+            )
+         )
+
+      return total.count
+   }
+
    public async findAll(
       pagination: PaginationRequest,
       searchString?: string
@@ -46,46 +77,6 @@ export default class UserRepository implements UserRepositoryInterface {
          return null
 
       return new User(user)
-   }
-
-   public async count(searchParam?: string) {
-      const [total] = await db.select({ count: count() }).from(usersTable).where(
-         and(
-            searchParam ? or(
-               like(usersTable.name, `%${searchParam}%`),
-               like(usersTable.email, `%${searchParam}%`),
-            ) : undefined,
-            notInArray(usersTable.roles, ['admin'] as keyof TUser['roles'])
-         ),
-      )
-
-      return total.count
-   }
-
-   public async save(userEntity: User) {
-      if (userEntity.getId()) {
-         const [updated] = await db.update(usersTable)
-            .set({
-               roles: userEntity.getRoles(),
-            })
-            .where(eq(usersTable.id, userEntity.getId()!)).returning();
-
-         Object.assign(userEntity, updated)
-      } else {
-         const [inserted] = await db.insert(usersTable).values({
-            name: userEntity.getName(),
-            email: userEntity.getEmail(),
-            roles: userEntity.getRoles(),
-         }).returning()
-
-         Object.assign(userEntity, inserted)
-      }
-
-      return userEntity
-   }
-
-   public async removeBy(by: 'id', id: number) {
-      await db.delete(usersTable).where(eq(usersTable[by], id))
    }
 
    public async findDoctors(
@@ -135,20 +126,29 @@ export default class UserRepository implements UserRepositoryInterface {
          : Object.values(result)
    }
 
-   public async countDoctors(searchParam?: string) {
-      const [total] = await db
-         .select({ count: count() })
-         .from(usersTable)
-         .where(
-            and(
-               eq(usersTable.roles, ['doctor']),
-               searchParam ? or(
-                  like(usersTable.name, `%${searchParam}%`),
-                  like(usersTable.email, `%${searchParam}%`),
-               ) : undefined
-            )
-         )
+   public async removeBy(by: 'id', id: number) {
+      await db.delete(usersTable).where(eq(usersTable[by], id))
+   }
 
-      return total.count
+   public async save(userEntity: User) {
+      if (userEntity.getId()) {
+         const [updated] = await db.update(usersTable)
+            .set({
+               roles: userEntity.getRoles(),
+            })
+            .where(eq(usersTable.id, userEntity.getId()!)).returning();
+
+         Object.assign(userEntity, updated)
+      } else {
+         const [inserted] = await db.insert(usersTable).values({
+            name: userEntity.getName(),
+            email: userEntity.getEmail(),
+            roles: userEntity.getRoles(),
+         }).returning()
+
+         Object.assign(userEntity, inserted)
+      }
+
+      return userEntity
    }
 }

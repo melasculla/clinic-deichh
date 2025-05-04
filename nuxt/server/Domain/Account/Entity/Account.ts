@@ -1,9 +1,8 @@
 export default class Account {
    private id: TAccount['id'] | null
-   private userId: TAccount['userId']
    private provider: TAccount['provider']
    private providerAccountId: TAccount['providerAccountId']
-
+   private userId: TAccount['userId']
    constructor(account: TNewAccount) {
       this.id = account.id || null
       this.userId = account.userId
@@ -15,10 +14,6 @@ export default class Account {
       return this.id
    }
 
-   public getUserId() {
-      return this.userId
-   }
-
    public getProvider() {
       return this.provider
    }
@@ -27,11 +22,8 @@ export default class Account {
       return this.providerAccountId
    }
 
-   public updateUserId(userId: TAccount['userId']) {
-      if (userId)
-         this.userId = userId
-
-      return this
+   public getUserId() {
+      return this.userId
    }
 
    public updateProvider(provider: TAccount['provider']) {
@@ -44,6 +36,13 @@ export default class Account {
    public updateProviderAccountId(providerAccountId: TAccount['providerAccountId']) {
       if (providerAccountId)
          this.providerAccountId = providerAccountId
+
+      return this
+   }
+
+   public updateUserId(userId: TAccount['userId']) {
+      if (userId)
+         this.userId = userId
 
       return this
    }
