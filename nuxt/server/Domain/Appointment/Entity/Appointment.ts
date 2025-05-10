@@ -30,6 +30,10 @@ export default class Appointment {
    public getDate() {
       return this.date
    }
+   
+   public setDate(date: Date): void {
+      this.date = date;
+  }
 
    public getDoctorId() {
       return this.doctorId

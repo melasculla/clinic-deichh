@@ -4,8 +4,16 @@ import Appointment from '~~/server/Domain/Appointment/Entity/Appointment'
 import { PaginationRequest } from '~~/server/Shared/Request/PaginationRequest'
 import { AppointmentQueryFilterRequest } from '~~/server/Application/Appointment/Request/AppointmentFilterRequest'
 
-import { count, desc, eq, aliasedTable, inArray } from 'drizzle-orm'
+import { count, desc, eq, aliasedTable, inArray, and, gte, lte } from 'drizzle-orm'
 import { PgSelectQueryBuilderBase } from 'drizzle-orm/pg-core'
+import { DateTime } from 'luxon'
+
+// Добавляем объявление типов для Luxon
+declare module 'luxon' {
+  interface DateTime {
+    toJSDate(): Date;
+  }
+}
 
 export default class AppointmentRepository implements AppointmentRepositoryInterface {
    private applyFilters<T extends PgSelectQueryBuilderBase<any, any, any, any, any, any, any, any, any>>(
@@ -22,12 +30,7 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
          return eq(column, data)
       }
 
-      // query
-      //    .where(and(
-      //       proccessMaybeArray(appointmentsTable.gender, filters.gender),
-      //       proccessMaybeArray(appointmentsTable.status, filters.status),
-      //       proccessMaybeArray(appointmentsTable.color, filters.color),
-      //    ))
+      // Фильтрация может быть добавлена здесь
    }
 
    public async count(filters: AppointmentQueryFilterRequest) {
@@ -114,5 +117,73 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
       }
 
       return appointment
+   }
+
+   public async getAvailableSlots(doctorId: number, date: string, duration: number = 30): Promise<string[]> {
+      const parsedDate = DateTime.fromISO(date)
+      if (!parsedDate.isValid) {
+         throw new Error('Некорректный формат даты')
+      }
+
+      const startDate = parsedDate.startOf('day')
+      const endDate = parsedDate.endOf('day')
+
+      const existingAppointments = await db
+         .select({ date: appointmentsTable.date })
+         .from(appointmentsTable)
+         .where(
+            and(
+               eq(appointmentsTable.doctorId, doctorId),
+               gte(appointmentsTable.date, startDate.toJSDate()),
+               lte(appointmentsTable.date, endDate.toJSDate())
+            )
+         )
+
+      const workStartHour = 9
+      const workEndHour = 17
+      const slotDuration = duration
+
+      const allSlots: Date[] = []
+      let currentSlot = startDate.set({ hour: workStartHour, minute: 0, second: 0 })
+
+      while (currentSlot.hour < workEndHour || (currentSlot.hour === workEndHour && currentSlot.minute === 0)) {
+         allSlots.push(currentSlot.toJSDate())
+         currentSlot = currentSlot.plus({ minutes: slotDuration })
+      }
+
+      const bookedSlots = existingAppointments.map(app => 
+         DateTime.fromJSDate(app.date).toFormat('HH:mm')
+      )
+
+      const availableSlots = allSlots.filter(slot => {
+         const slotTime = DateTime.fromJSDate(slot).toFormat('HH:mm')
+         return !bookedSlots.includes(slotTime)
+      })
+
+      return availableSlots.map(slot => DateTime.fromJSDate(slot).toFormat('HH:mm'))
+   }
+
+   public async createWithDateTime(appointment: Appointment, dateTime: string): Promise<Appointment> {
+      const parsedDateTime = DateTime.fromISO(dateTime)
+      if (!parsedDateTime.isValid) {
+         throw new Error('Неверный формат даты и времени')
+      }
+
+      // Используем getDoctorId() вместо прямого доступа к приватному свойству
+      const doctorId = appointment.getDoctorId()
+      
+      const availableSlots = await this.getAvailableSlots(
+         doctorId,
+         parsedDateTime.toFormat('yyyy-MM-dd')
+      )
+
+      const requestedTime = parsedDateTime.toFormat('HH:mm')
+      if (!availableSlots.includes(requestedTime)) {
+         throw new Error('Выбранное время уже занято')
+      }
+
+      // Используем setDate() для установки даты
+      appointment.setDate(parsedDateTime.toJSDate())
+      return this.save(appointment)
    }
 }

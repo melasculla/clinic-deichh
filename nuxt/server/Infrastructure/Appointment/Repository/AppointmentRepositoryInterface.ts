@@ -31,4 +31,7 @@ export default interface AppointmentRepositoryInterface {
    save(appointment: Appointment): Promise<Appointment>
 
    removeBy(by: 'id', id: number): Promise<void>
+   getAvailableSlots(doctorId: number, date: string, duration?: number): Promise<string[]>
+
+   createWithDateTime(appointment: Appointment, dateTime: string): Promise<Appointment>
 }

@@ -9,8 +9,16 @@ export default class CreateAppointmentService implements CreateAppointmentServic
       private repository: AppointmentRepositoryInterface = new AppointmentRepository()
    ) { }
 
-   public async createAppointment(appointment: AppointmentPostRequest) {
-      const result = await this.repository.save(new Appointment(appointment as any))
-      return result
+   public async createAppointment(
+      appointment: AppointmentPostRequest,
+      dateTime?: string
+   ) {
+      const newAppointment = new Appointment(appointment as any)
+      
+      if (dateTime) {
+         return this.repository.createWithDateTime(newAppointment, dateTime)
+      }
+      
+      return this.repository.save(newAppointment)
    }
 }

@@ -2,5 +2,8 @@ import { AppointmentPostRequest } from '~~/server/Application/Appointment/Reques
 import Appointment from '../Entity/Appointment'
 
 export default interface CreateAppointmentServiceInterface {
-   createAppointment(appointment: AppointmentPostRequest): Promise<Appointment>
+   createAppointment(
+      appointment: AppointmentPostRequest,
+      dateTime?: string
+   ): Promise<Appointment>
 }
