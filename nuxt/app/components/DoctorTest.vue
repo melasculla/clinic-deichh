@@ -70,7 +70,9 @@ const resetTest = () => {
 	currentStep.value = 1
 	selectedSymptoms.value = []
 	filters.experience = 'any'
+
 }
+
 </script>
 
 <template>
