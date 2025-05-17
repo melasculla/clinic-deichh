@@ -10,9 +10,9 @@ import { DateTime } from 'luxon'
 
 // Добавляем объявление типов для Luxon
 declare module 'luxon' {
-  interface DateTime {
-    toJSDate(): Date;
-  }
+   interface DateTime {
+      toJSDate(): Date;
+   }
 }
 
 export default class AppointmentRepository implements AppointmentRepositoryInterface {
@@ -33,10 +33,12 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
       // Фильтрация может быть добавлена здесь
    }
 
-   public async count(filters: AppointmentQueryFilterRequest) {
+   public async count(filters: AppointmentQueryFilterRequest, doctorId: number) {
       const query = db
          .select({ count: count() })
          .from(appointmentsTable)
+         .innerJoin(usersTable, eq(appointmentsTable.doctorId, usersTable.id))
+         .where(eq(usersTable.id, doctorId))
          .$dynamic()
 
       this.applyFilters(filters, query)
@@ -47,6 +49,7 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
    public async findAll(
       filters: AppointmentQueryFilterRequest,
       pagination: PaginationRequest,
+      doctorId: number
    ) {
       const doctor = aliasedTable(usersTable, 'doctor')
 
@@ -71,6 +74,7 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
          .from(appointmentsTable)
          .innerJoin(usersTable, eq(appointmentsTable.userId, usersTable.id))
          .innerJoin(doctor, eq(appointmentsTable.doctorId, doctor.id))
+         .where(eq(doctor.id, doctorId))
          .limit(100)
          .orderBy(desc(appointmentsTable.createdAt))
          .$dynamic()
@@ -151,7 +155,7 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
          currentSlot = currentSlot.plus({ minutes: slotDuration })
       }
 
-      const bookedSlots = existingAppointments.map(app => 
+      const bookedSlots = existingAppointments.map(app =>
          DateTime.fromJSDate(app.date).toFormat('HH:mm')
       )
 
@@ -171,7 +175,7 @@ export default class AppointmentRepository implements AppointmentRepositoryInter
 
       // Используем getDoctorId() вместо прямого доступа к приватному свойству
       const doctorId = appointment.getDoctorId()
-      
+
       const availableSlots = await this.getAvailableSlots(
          doctorId,
          parsedDateTime.toFormat('yyyy-MM-dd')

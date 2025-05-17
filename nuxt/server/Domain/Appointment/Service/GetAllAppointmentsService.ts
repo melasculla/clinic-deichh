@@ -12,16 +12,11 @@ export default class GetAllAppointmentsService implements GetAllAppointmentsServ
    public async getAllAppointments(
       filters: AppointmentQueryFilterRequest,
       pagination: PaginationRequest,
-      additionalFilters?: {
-        doctorId?: number
-        dateFrom?: string
-        dateTo?: string
-        status?: string
-      }
+      doctorId: number
    ) {
       const [appointments, total] = await Promise.all([
-         this.repository.findAll(filters, pagination),
-         this.repository.count(filters)
+         this.repository.findAll(filters, pagination, doctorId),
+         this.repository.count(filters, doctorId)
       ])
 
       return { appointments, total }

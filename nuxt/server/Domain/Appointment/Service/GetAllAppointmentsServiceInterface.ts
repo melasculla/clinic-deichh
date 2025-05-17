@@ -5,7 +5,8 @@ import AppointmentRepositoryInterface from '~~/server/Infrastructure/Appointment
 export default interface GetAllAppointmentsServiceInterface {
    getAllAppointments(
       filters: AppointmentQueryFilterRequest,
-      pagination: PaginationRequest
+      pagination: PaginationRequest,
+      doctorId: number
    ): Promise<{
       appointments: Awaited<ReturnType<AppointmentRepositoryInterface['findAll']>>
       total: number

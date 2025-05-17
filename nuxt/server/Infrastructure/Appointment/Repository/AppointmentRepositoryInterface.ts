@@ -6,6 +6,7 @@ export default interface AppointmentRepositoryInterface {
    findAll(
       filters: AppointmentQueryFilterRequest,
       pagination: PaginationRequest,
+      doctorId: number
    ): Promise<Array<{
       id: TAppointment['id']
       price: TAppointment['price']
@@ -26,7 +27,7 @@ export default interface AppointmentRepositoryInterface {
 
    findBy(by: 'id' | 'slug', column: number | string): Promise<Appointment | null>
 
-   count(filters: AppointmentQueryFilterRequest): Promise<number>
+   count(filters: AppointmentQueryFilterRequest, doctorId: number): Promise<number>
 
    save(appointment: Appointment): Promise<Appointment>
 

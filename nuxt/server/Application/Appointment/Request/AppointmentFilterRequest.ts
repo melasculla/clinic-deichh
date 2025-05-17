@@ -13,3 +13,13 @@ export const AppointmentQueryFilterSchema = z.object({
 })
 
 export type AppointmentQueryFilterRequest = z.infer<typeof AppointmentQueryFilterSchema>
+
+// добавь их сюда в схему
+
+// Дополнительные фильтры
+// const doctorFilter = {
+//    doctorId,
+//    // ...(query.dateFrom && { dateFrom: String(query.dateFrom) }),
+//    // ...(query.dateTo && { dateTo: String(query.dateTo) }),
+//    // ...(query.status && { status: String(query.status) })
+// }
