@@ -86,6 +86,10 @@ const nextMonth = () => {
 };
 
 const { data } = await useFetch('/api/appointments/doctors/2/appointments')
+
+const { doctorId  } = defineProps<{
+   doctorId: number
+}>()
 </script>
 
 <template>

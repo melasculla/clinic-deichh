@@ -8,4 +8,9 @@ export const AppointmentPostSchema = z.object({
    price: z.preprocess(zodPreprocessToNumber, z.number()).optional().nullable(),
 }).strict()
 
+const result = await $fetch('/api/appointments/create', {
+   method: 'POST',
+   body: {}
+})
+
 export type AppointmentPostRequest = z.infer<typeof AppointmentPostSchema>

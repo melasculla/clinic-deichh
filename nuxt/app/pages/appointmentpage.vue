@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+   
 
 </script>
 
@@ -9,8 +10,9 @@
             <div class="bg-white p-4 col-span-1 rounded-2xl"></div>
 
             <div class="bg-white p-4 col-span-2 rounded-2xl">
-               <Calendar />
+               <Calendar :doctor-id="1" />
             </div>
+            
          </div>
       </div>
 

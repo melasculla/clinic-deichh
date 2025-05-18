@@ -9,17 +9,13 @@ export const AppointmentQueryFilterSchema = z.object({
    }, z.object({
       column: z.enum(['price']),
       direction: z.enum(['asc', 'desc']),
-   }), { message: 'Wrong JSON format' }).optional().nullable()
+   }), { message: 'Wrong JSON format' }).optional().nullable(),
+
+   // Добавленные фильтры из комментариев (без изменения структуры)
+   doctorId: z.string().optional(),
+   dateFrom: z.string().optional(),
+   dateTo: z.string().optional(),
+   status: z.string().optional()
 })
 
 export type AppointmentQueryFilterRequest = z.infer<typeof AppointmentQueryFilterSchema>
-
-// добавь их сюда в схему
-
-// Дополнительные фильтры
-// const doctorFilter = {
-//    doctorId,
-//    // ...(query.dateFrom && { dateFrom: String(query.dateFrom) }),
-//    // ...(query.dateTo && { dateTo: String(query.dateTo) }),
-//    // ...(query.status && { status: String(query.status) })
-// }

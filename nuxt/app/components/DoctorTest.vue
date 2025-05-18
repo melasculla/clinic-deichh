@@ -131,7 +131,7 @@ const resetTest = () => {
 					<h4 class="text-2xl font-semibold">{{ doctor.name }}</h4>
 					<p class="text-lg mt-2">Специализации: {{ doctor.specializations.join(', ') }}</p>
 					<!-- <p v-if="doctor.experience" class="text-lg mt-1">Опыт: {{ doctor.experience }} лет</p> -->
-					<ButtonMain class="mt-4">Записаться на консультацию</ButtonMain>
+					<ButtonMain class="mt-4 inline-block justify-self-start" to="/appointmentpage">Записаться на консультацию</ButtonMain>
 				</div>
 			</div>
 
