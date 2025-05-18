@@ -94,8 +94,7 @@ const { doctorId  } = defineProps<{
 
 <template>
    <div class="bg-white rounded-xl  p-4 w-full">
-      <!-- удалишь потом -->
-      <pre>{{ data?.data }}</pre>
+
 
       <!-- Заголовок календаря -->
       <div class="flex items-center justify-between mb-4">

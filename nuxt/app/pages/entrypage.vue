@@ -5,7 +5,7 @@ const { signIn } = useAuth()
 <template>
    <div class="py-18">
       <div
-         class="relative grid gap-8 max-w-140 mx-auto bg-background border border-secondary rounded-3xl text-center py-28 px-10">
+         class="relative grid gap-8 max-w-140 mx-auto bg-background border border-secondary rounded-3xl text-center py-10 px-10">
          <p class="text-6xl mb-5">Вход</p>
 
          <div class="login text-4xl">
@@ -14,11 +14,11 @@ const { signIn } = useAuth()
          </div>
 
          <div class="grid gap-2">
-            <ButtonMain size="big">
+            <ButtonMain size="small">
                Продолжить
             </ButtonMain>
 
-            <ButtonMain @click="signIn('google')" size="big">
+            <ButtonMain @click="signIn('google')" size="small">
                Войти через Google
             </ButtonMain>
          </div>
